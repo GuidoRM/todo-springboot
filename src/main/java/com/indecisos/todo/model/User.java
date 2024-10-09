@@ -1,4 +1,5 @@
 package com.indecisos.todo.model;
+
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -29,6 +30,12 @@ public class User {
     @Lob
     @Column(name = "Profile_Image")
     private byte[] profileImage;
+
+    @Column(name = "Token_Expiration")
+    private LocalDateTime tokenExpiration;
+
+    @Column(name = "Is_Anonymous")
+    private Boolean isAnonymous;
 
     // Getters y setters
 
@@ -86,5 +93,21 @@ public class User {
 
     public void setProfileImage(byte[] profileImage) {
         this.profileImage = profileImage;
+    }
+
+    public LocalDateTime getTokenExpiration() {
+        return tokenExpiration;
+    }
+
+    public void setTokenExpiration(LocalDateTime tokenExpiration) {
+        this.tokenExpiration = tokenExpiration;
+    }
+
+    public Boolean getIsAnonymous() {
+        return isAnonymous;
+    }
+
+    public void setIsAnonymous(Boolean isAnonymous) {
+        this.isAnonymous = isAnonymous;
     }
 }
