@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public interface ListRepository extends JpaRepository<ListModel, Long> {
-    @Query("SELECT l FROM List l WHERE l.id_Workspace = :id")
+    @Query("SELECT l FROM ListModel l WHERE l.id_Workspace = :id")
     List<ListModel> findByWorkspace(@Param("id") Long id);
 }
+

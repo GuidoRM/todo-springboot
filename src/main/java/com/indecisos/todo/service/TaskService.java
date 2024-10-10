@@ -20,15 +20,25 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
-    public Optional<Task> findById(Long id) { return taskRepository.findById(id);}
+    public Optional<Task> findById(Long id) {
+        return taskRepository.findById(id);
+    }
 
-    public List<Task> findAllTaskOfWorkspace(Long id_workspace){ return  taskRepository.findAllTaskOfWorkspace(id_workspace); }
+    public List<Task> findAllTaskOfWorkspace(Long id_workspace) {
+        return taskRepository.findAllTaskOfWorkspace(id_workspace);
+    }
 
-    public List<Task> findByList(Long id_list) { return taskRepository.findByList(id_list); }
+    public List<Task> findByList(Long id_list) {
+        return taskRepository.findByList(id_list);
+    }
 
-    public List<Task> findByStatus(String status, Long id_workspace) { return taskRepository.findByStatus(status, id_workspace); }
+    public List<Task> findByStatus(String status, Long id_workspace) {
+        return taskRepository.findByStatus(status, id_workspace);
+    }
 
-    public List<Task> findByDueDate(LocalDateTime due_date, Long id_workspace) { return taskRepository.findByDueDate(due_date, id_workspace); }
+    public List<Task> findByDueDate(LocalDateTime due_date, Long id_workspace) {
+        return taskRepository.findByDueDate(due_date, id_workspace);
+    }
 
     public Task save(Task task) {
         return taskRepository.save(task);

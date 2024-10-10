@@ -16,9 +16,6 @@ public class Task {
     @Column(name = "Title")
     private String title;
 
-    @Column(name = "Last_Name")
-    private String lastName;
-
     @Column(name = "Description")
     private String description;
 
@@ -52,14 +49,6 @@ public class Task {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getDescription() {
