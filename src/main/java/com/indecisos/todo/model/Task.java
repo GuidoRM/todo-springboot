@@ -3,6 +3,7 @@ package com.indecisos.todo.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "Task")
@@ -33,6 +34,9 @@ public class Task {
 
     @Column(name = "ID_List")
     private Long id_List;
+
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    private List<Reminder> reminders;
 
 
     // Getters y setters
