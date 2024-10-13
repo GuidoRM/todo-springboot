@@ -1,13 +1,14 @@
 package com.indecisos.todo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
 @Table(name = "User")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIgnoreProperties({"userWorkspaces", "hibernateLazyInitializer", "handler"})
 public class User {
 
     @Id
@@ -41,8 +42,7 @@ public class User {
     private Boolean isAnonymous;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
-    @JsonIgnoreProperties("user")
+    @JsonIgnore
     private Set<UserWorkspace> userWorkspaces;
 
     // Getters y setters

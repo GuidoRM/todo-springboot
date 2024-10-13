@@ -1,5 +1,8 @@
 package com.indecisos.todo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.indecisos.todo.type.WorkspaceType;
 import jakarta.persistence.*;
 
@@ -9,6 +12,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Workspace")
+@JsonIgnoreProperties({"userWorkspaces", "hibernateLazyInitializer", "handler"})
 public class Workspace {
 
     @Id
@@ -32,6 +36,7 @@ public class Workspace {
     @Column(name = "Creation_Date")
     private LocalDateTime creationDate;
     @OneToMany(mappedBy = "workspace", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<UserWorkspace> userWorkspaces;
 
     public Long getIdWorkspace() {

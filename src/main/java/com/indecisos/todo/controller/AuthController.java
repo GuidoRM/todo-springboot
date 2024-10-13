@@ -31,7 +31,7 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/register")
+    @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         try {
             userService.save(user);

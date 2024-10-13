@@ -8,22 +8,21 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "User_Workspace")
+@JsonIgnoreProperties({"user", "workspace"})
 public class UserWorkspace {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_User_Workspace")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_User", referencedColumnName = "ID_User")
-    @JsonIgnore  // Agrega esta anotación para evitar referencias circulares
+    @JsonIgnore
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_Workspace", referencedColumnName = "ID_Workspace")
-    @JsonBackReference
-    @JsonIgnoreProperties("userWorkspaces")
-    @JsonIgnore  // Agrega esta anotación para evitar referencias circulares
+    @JsonIgnore
     private Workspace workspace;
 
     @Column(name = "Role")
