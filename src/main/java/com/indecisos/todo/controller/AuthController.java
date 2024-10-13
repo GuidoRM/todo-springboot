@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
 
     @Autowired
@@ -51,7 +52,8 @@ public class AuthController {
         }
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
-        final String jwt = jwtUtil.generateToken(userDetails.getUsername());
+        long fixedUserId = userService.findByEmail(authenticationRequest.getEmail()).getId();
+        final String jwt = jwtUtil.generateToken(userDetails.getUsername(), fixedUserId);
 
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }

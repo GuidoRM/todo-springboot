@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/lists")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ListController {
 
     @Autowired
@@ -78,6 +79,25 @@ public class ListController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<ListModel>> updateList(@PathVariable Long id, @RequestBody ListModel listModel) {
+        try {
+            ListModel updatedList = listService.update(id, listModel);
+            ApiResponse<ListModel> response = new ApiResponse<>(
+                    HttpStatus.OK.value(),
+                    "List actualizada con éxito!",
+                    updatedList
+            );
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), e.getMessage(), null));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al actualizar la lista", null));
+        }
+    }
     @PostMapping
     public ResponseEntity<ApiResponse<ListModel>> createList(@RequestBody ListModel listModel) {
         try {

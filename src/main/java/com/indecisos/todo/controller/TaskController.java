@@ -1,5 +1,6 @@
 package com.indecisos.todo.controller;
 
+import com.indecisos.todo.dto.ApiResponse;
 import com.indecisos.todo.dto.ResponseDTO;
 import com.indecisos.todo.model.Task;
 import com.indecisos.todo.service.TaskService;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/tasks")
+@CrossOrigin(origins = "http://localhost:5173")
 public class TaskController {
 
     @Autowired

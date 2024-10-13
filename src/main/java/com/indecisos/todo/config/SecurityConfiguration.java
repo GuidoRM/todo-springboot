@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -36,7 +38,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // Configuración de las rutas de seguridad
         http
-                .csrf(AbstractHttpConfigurer::disable) // Deshabilita CSRF
+                .csrf(AbstractHttpConfigurer::disable).cors(withDefaults()) // Habilita CORS // Deshabilita CSRF
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/auth/register", "/api/auth/login").permitAll() // Permitir acceso sin autenticar
                         .anyRequest().authenticated()

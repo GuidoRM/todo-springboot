@@ -23,6 +23,19 @@ public class ListService {
 
     public ListModel save(ListModel listModel) { return listRepository.save(listModel); }
 
+    public ListModel update(Long id, ListModel listModel) {
+        Optional<ListModel> existingList = listRepository.findById(id);
+        if (existingList.isPresent()) {
+            ListModel updatedList = existingList.get();
+            updatedList.setTitle(listModel.getTitle());
+            updatedList.setDescription(listModel.getDescription());
+            // Actualizar otros campos según sea necesario
+            return listRepository.save(updatedList);
+        } else {
+            throw new RuntimeException("List not found with id " + id);
+        }
+    }
+
     public void deleteById(Long id) {
         listRepository.deleteById(id);
     }

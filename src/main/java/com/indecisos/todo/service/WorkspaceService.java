@@ -1,10 +1,16 @@
 package com.indecisos.todo.service;
 
+import com.indecisos.todo.model.User;
+import com.indecisos.todo.model.UserWorkspace;
 import com.indecisos.todo.model.Workspace;
+import com.indecisos.todo.repository.UserRepository;
+import com.indecisos.todo.repository.UserWorkspaceRepository;
 import com.indecisos.todo.repository.WorkspaceRepository;
+import com.indecisos.todo.type.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +19,12 @@ public class WorkspaceService {
 
     @Autowired
     private WorkspaceRepository workspaceRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserWorkspaceRepository userWorkspaceRepository;
 
     public List<Workspace> findAll() {
         return workspaceRepository.findAll();
@@ -26,8 +38,33 @@ public class WorkspaceService {
         return workspaceRepository.save(workspace);
     }
 
+    public Workspace createWorkspaceForUser(Long userId, Workspace workspace) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (!userOptional.isPresent()) {
+            throw new IllegalArgumentException("Usuario no encontrado");
+        }
+
+        User user = userOptional.get();
+        workspace.setCreationDate(LocalDateTime.now());
+        Workspace savedWorkspace = workspaceRepository.save(workspace);
+
+        // Crear y guardar la relación en la tabla intermedia UserWorkspace
+        UserWorkspace userWorkspace = new UserWorkspace();
+        userWorkspace.setUser(user);
+        userWorkspace.setWorkspace(savedWorkspace);
+        userWorkspace.setRole(UserRole.owner);  // Asignar el rol de "propietario" al usuario que crea el workspace
+
+        userWorkspaceRepository.save(userWorkspace);
+
+        return savedWorkspace;
+    }
+
     public void deleteById(Long id) {
         workspaceRepository.deleteById(id);
+    }
+
+    public List<Workspace> findByUserId(Long userId) {
+        return workspaceRepository.findByUserId(userId);
     }
 
     public Workspace updateWorkspace(Long id, Workspace workspaceDetails) {

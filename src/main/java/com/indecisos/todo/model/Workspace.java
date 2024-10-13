@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "Workspace")
@@ -30,8 +31,8 @@ public class Workspace {
 
     @Column(name = "Creation_Date")
     private LocalDateTime creationDate;
-
-    // Getters y Setters
+    @OneToMany(mappedBy = "workspace", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<UserWorkspace> userWorkspaces;
 
     public Long getIdWorkspace() {
         return idWorkspace;
@@ -79,5 +80,13 @@ public class Workspace {
 
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public Set<UserWorkspace> getUserWorkspaces() {
+        return userWorkspaces;
+    }
+
+    public void setUserWorkspaces(Set<UserWorkspace> userWorkspaces) {
+        this.userWorkspaces = userWorkspaces;
     }
 }

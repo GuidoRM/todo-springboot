@@ -47,4 +47,20 @@ public class TaskService {
     public void deleteById(Long id) {
         taskRepository.deleteById(id);
     }
+
+    public Task update(Long id, Task taskDetails) {
+        Optional<Task> existingTask = taskRepository.findById(id);
+        if (existingTask.isPresent()) {
+            Task updatedTask = existingTask.get();
+            updatedTask.setTitle(taskDetails.getTitle());
+            updatedTask.setDescription(taskDetails.getDescription());
+            updatedTask.setPriority(taskDetails.getPriority());
+            updatedTask.setStatus(taskDetails.getStatus());
+            updatedTask.setDue_Date(taskDetails.getDue_Date());
+            // Actualizar etiquetas y adjuntos si es necesario
+            return taskRepository.save(updatedTask);
+        } else {
+            throw new RuntimeException("Task not found with id " + id);
+        }
+    }
 }

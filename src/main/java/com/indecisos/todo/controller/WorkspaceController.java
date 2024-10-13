@@ -4,6 +4,7 @@ import com.indecisos.todo.dto.ResponseDTO;
 import com.indecisos.todo.model.Workspace;
 import com.indecisos.todo.service.WorkspaceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/workspaces")
+@CrossOrigin(origins = "http://localhost:5173")
 public class WorkspaceController {
 
     @Autowired
@@ -38,10 +40,37 @@ public class WorkspaceController {
         }
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<ResponseDTO> getWorkspaceByUserId(@PathVariable Long userId) {
+        try {
+            List<Workspace> workspaces = workspaceService.findByUserId(userId);
+            if (workspaces.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponseDTO(HttpStatus.NOT_FOUND.value(), "No se encontraron workspaces para el usuario", null));
+            }
+            return ResponseEntity.ok(new ResponseDTO(HttpStatus.OK.value(), "Solicitud satisfactoria!", workspaces));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al obtener workspaces del usuario", null));
+        }
+    }
+
+
     @PostMapping
     public ResponseEntity<ResponseDTO> createWorkspace(@RequestBody Workspace workspace) {
         try {
             Workspace savedWorkspace = workspaceService.save(workspace);
+            return ResponseEntity.ok(new ResponseDTO(200, "Workspace creado con éxito!", savedWorkspace));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new ResponseDTO(500, "Error al crear el workspace", null));
+        }
+    }
+
+    @PostMapping("/user/{userId}")
+    public ResponseEntity<ResponseDTO> createWorkspaceForUser(@PathVariable Long userId, @RequestBody Workspace workspace) {
+        try {
+            Workspace savedWorkspace = workspaceService.createWorkspaceForUser(userId, workspace);
             return ResponseEntity.ok(new ResponseDTO(200, "Workspace creado con éxito!", savedWorkspace));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(new ResponseDTO(500, "Error al crear el workspace", null));

@@ -1,8 +1,12 @@
 package com.indecisos.todo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "Task")
@@ -31,9 +35,36 @@ public class Task {
     @Column(name = "ID_List")
     private Long id_List;
 
+    @ManyToMany
+    @JoinTable(
+            name = "Task_Label",
+            joinColumns = @JoinColumn(name = "ID_Task"),
+            inverseJoinColumns = @JoinColumn(name = "ID_Label")
+    )
+    @JsonIgnore
+    private Set<Label> labels;
+
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Attachment> attachments;
+
 
     // Getters y setters
 
+    public Set<Label> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(Set<Label> labels) {
+        this.labels = labels;
+    }
+
+    public Set<Attachment> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(Set<Attachment> attachments) {
+        this.attachments = attachments;
+    }
 
     public Long getId() {
         return id;

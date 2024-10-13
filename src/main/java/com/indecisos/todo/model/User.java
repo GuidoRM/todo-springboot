@@ -1,7 +1,10 @@
 package com.indecisos.todo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "User")
@@ -37,8 +40,12 @@ public class User {
     @Column(name = "Is_Anonymous")
     private Boolean isAnonymous;
 
-    // Getters y setters
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    @JsonIgnoreProperties("user")
+    private Set<UserWorkspace> userWorkspaces;
 
+    // Getters y setters
     public Long getId() {
         return id;
     }
@@ -110,4 +117,21 @@ public class User {
     public void setIsAnonymous(Boolean isAnonymous) {
         this.isAnonymous = isAnonymous;
     }
+
+    public Boolean getAnonymous() {
+        return isAnonymous;
+    }
+
+    public void setAnonymous(Boolean anonymous) {
+        isAnonymous = anonymous;
+    }
+
+    public Set<UserWorkspace> getUserWorkspaces() {
+        return userWorkspaces;
+    }
+
+    public void setUserWorkspaces(Set<UserWorkspace> userWorkspaces) {
+        this.userWorkspaces = userWorkspaces;
+    }
+
 }
