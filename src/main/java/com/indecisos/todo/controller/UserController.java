@@ -49,6 +49,25 @@ public class UserController {
                     return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
                 });
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<User>> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
+        try {
+            User updatedUser = userService.updateUser(id, userDetails);
+            ApiResponse<User> response = new ApiResponse<>(
+                    HttpStatus.OK.value(),
+                    "Perfil actualizado correctamente",
+                    updatedUser
+            );
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            ApiResponse<User> response = new ApiResponse<>(
+                    HttpStatus.BAD_REQUEST.value(),
+                    e.getMessage(),
+                    null
+            );
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @PostMapping
     public ResponseEntity<ApiResponse<User>> createUser(@RequestBody User user) {

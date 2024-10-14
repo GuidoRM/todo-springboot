@@ -48,8 +48,53 @@ public class UserService {
 
         return userRepository.save(user);
     }
+
+    public User updateUser(Long id, User userDetails) {
+        Optional<User> existingUserOptional = userRepository.findById(id);
+
+        if (existingUserOptional.isPresent()) {
+            User existingUser = existingUserOptional.get();
+
+            // Verificar si el correo ha cambiado y si el nuevo correo ya está en uso por otro usuario
+            if (userDetails.getEmail() != null && !existingUser.getEmail().equals(userDetails.getEmail())) {
+                Optional<User> userWithSameEmail = userRepository.findByEmail(userDetails.getEmail());
+                if (userWithSameEmail.isPresent() && !userWithSameEmail.get().getId().equals(id)) {
+                    throw new IllegalArgumentException("El correo electrónico ya está registrado");
+                }
+                existingUser.setEmail(userDetails.getEmail());
+            }
+
+            // Actualizamos solo los campos que no son nulos
+            if (userDetails.getFirstName() != null) {
+                existingUser.setFirstName(userDetails.getFirstName());
+            }
+            if (userDetails.getLastName() != null) {
+                existingUser.setLastName(userDetails.getLastName());
+            }
+            if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
+                existingUser.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+            }
+            if (userDetails.getProfileImage() != null) {
+                existingUser.setProfileImage(userDetails.getProfileImage());
+            }
+
+            return userRepository.save(existingUser);
+        } else {
+            throw new IllegalArgumentException("Usuario no encontrado");
+        }
+    }
+
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
+    }
+
+    public boolean isEmailUnique(String email, Long userId) {
+        Optional<User> existingUserOptional = userRepository.findByEmail(email);
+
+        // Si no hay un usuario con ese correo, o el usuario encontrado es el mismo que estamos actualizando
+        return existingUserOptional
+                .map(existingUser -> existingUser.getId().equals(userId))
+                .orElse(true);
     }
 
 
