@@ -26,15 +26,15 @@ public class TaskController {
         try {
             List<Task> tasks = taskService.findAll();
             ResponseDTO response = new ResponseDTO(
-                    HttpStatus.OK.value(),
-                    "Solicitud satisfactoria!",
-                    tasks
+                HttpStatus.OK.value(),
+                "Solicitud satisfactoria!",
+                tasks
             );
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al obtener tareas", null));
+                .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al obtener tareas", null));
         }
     }
 
@@ -42,25 +42,25 @@ public class TaskController {
     public ResponseEntity<ResponseDTO> getTaskById(@PathVariable Long id) {
         try {
             return taskService.findById(id)
-                    .map(task -> {
-                        ResponseDTO response = new ResponseDTO(
-                                HttpStatus.OK.value(),
-                                "Solicitud satisfactoria!",
-                                task
-                        );
-                        return new ResponseEntity<>(response, HttpStatus.OK);
-                    })
-                    .orElseGet(() -> {
-                        ResponseDTO response = new ResponseDTO(
-                                HttpStatus.NOT_FOUND.value(),
-                                "Task not found",
-                                null
-                        );
-                        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-                    });
+                .map(task -> {
+                    ResponseDTO response = new ResponseDTO(
+                        HttpStatus.OK.value(),
+                        "Solicitud satisfactoria!",
+                        task
+                    );
+                    return new ResponseEntity<>(response, HttpStatus.OK);
+                })
+                .orElseGet(() -> {
+                    ResponseDTO response = new ResponseDTO(
+                        HttpStatus.NOT_FOUND.value(),
+                        "Task not found",
+                        null
+                    );
+                    return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+                });
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al obtener la tarea", null));
+                .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al obtener la tarea", null));
         }
     }
 
@@ -69,15 +69,15 @@ public class TaskController {
         try {
             List<Task> tasks = taskService.findAllTaskOfWorkspace(id_workspace);
             ResponseDTO response = new ResponseDTO(
-                    HttpStatus.OK.value(),
-                    "Solicitud satisfactoria!",
-                    tasks
+                HttpStatus.OK.value(),
+                "Solicitud satisfactoria!",
+                tasks
             );
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al obtener tareas del workspace", null));
+                .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al obtener tareas del workspace", null));
         }
     }
 
@@ -86,15 +86,15 @@ public class TaskController {
         try {
             List<Task> tasks = taskService.findByList(id_list);
             ResponseDTO response = new ResponseDTO(
-                    HttpStatus.OK.value(),
-                    "Solicitud satisfactoria!",
-                    tasks
+                HttpStatus.OK.value(),
+                "Solicitud satisfactoria!",
+                tasks
             );
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al obtener tareas de la lista", null));
+                .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al obtener tareas de la lista", null));
         }
     }
 
@@ -103,15 +103,15 @@ public class TaskController {
         try {
             List<Task> tasks = taskService.findByStatus(status, id_workspace);
             ResponseDTO response = new ResponseDTO(
-                    HttpStatus.OK.value(),
-                    "Solicitud satisfactoria!",
-                    tasks
+                HttpStatus.OK.value(),
+                "Solicitud satisfactoria!",
+                tasks
             );
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al obtener tareas por estado", null));
+                .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al obtener tareas por estado", null));
         }
     }
 
@@ -120,15 +120,15 @@ public class TaskController {
         try {
             List<Task> tasks = taskService.findByDueDate(due_date, id_workspace);
             ResponseDTO response = new ResponseDTO(
-                    HttpStatus.OK.value(),
-                    "Solicitud satisfactoria!",
-                    tasks
+                HttpStatus.OK.value(),
+                "Solicitud satisfactoria!",
+                tasks
             );
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al obtener tareas por fecha de vencimiento", null));
+                .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al obtener tareas por fecha de vencimiento", null));
         }
     }
 
@@ -137,15 +137,15 @@ public class TaskController {
         try {
             Task savedTask = taskService.save(task);
             ResponseDTO response = new ResponseDTO(
-                    HttpStatus.CREATED.value(),
-                    "Task creado con éxito!",
-                    savedTask
+                HttpStatus.CREATED.value(),
+                "Task creado con éxito!",
+                savedTask
             );
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al crear la tarea", null));
+                .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al crear la tarea", null));
         }
     }
 
@@ -154,14 +154,14 @@ public class TaskController {
         try {
             taskService.deleteById(id);
             ResponseDTO response = new ResponseDTO(
-                    HttpStatus.NO_CONTENT.value(),
-                    "Task eliminado con éxito!",
-                    null
+                HttpStatus.NO_CONTENT.value(),
+                "Task eliminado con éxito!",
+                null
             );
             return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al eliminar la tarea", null));
+                .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al eliminar la tarea", null));
         }
     }
 
@@ -179,23 +179,23 @@ public class TaskController {
                 task.setId_List(taskDetails.getId_List());
                 Task updatedTask = taskService.save(task);
                 ResponseDTO response = new ResponseDTO(
-                        HttpStatus.OK.value(),
-                        "Task actualizado con éxito!",
-                        updatedTask
+                    HttpStatus.OK.value(),
+                    "Task actualizado con éxito!",
+                    updatedTask
                 );
                 return new ResponseEntity<>(response, HttpStatus.OK);
             } else {
                 ResponseDTO response = new ResponseDTO(
-                        HttpStatus.NOT_FOUND.value(),
-                        "Task not found",
-                        null
+                    HttpStatus.NOT_FOUND.value(),
+                    "Task not found",
+                    null
                 );
                 return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al actualizar la tarea", null));
+                .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al actualizar la tarea", null));
         }
     }
 }
