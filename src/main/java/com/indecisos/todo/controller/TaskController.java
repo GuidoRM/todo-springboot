@@ -153,17 +153,15 @@ public class TaskController {
     public ResponseEntity<ResponseDTO> deleteTask(@PathVariable Long id) {
         try {
             taskService.deleteById(id);
-            ResponseDTO response = new ResponseDTO(
-                HttpStatus.NO_CONTENT.value(),
-                "Task eliminado con éxito!",
-                null
-            );
-            return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
+            ResponseDTO response = new ResponseDTO(HttpStatus.OK.value(), "Task eliminada con éxito!", null);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al eliminar la tarea", null));
+                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error al eliminar la tarea", null));
         }
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDTO> updateTask(@PathVariable Long id, @RequestBody Task taskDetails) {

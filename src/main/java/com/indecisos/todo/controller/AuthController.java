@@ -13,6 +13,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -31,15 +32,22 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
+    @PostMapping(value = "/register", consumes = "multipart/form-data")
+    public ResponseEntity<?> registerUser(
+            @RequestPart("user") User user,
+            @RequestPart(value = "profileImage", required = false) MultipartFile profileImage) {
         try {
+            if (profileImage != null && !profileImage.isEmpty()) {
+                user.setProfileImage(profileImage.getBytes());
+            }
             userService.save(user);
             return ResponseEntity.ok("Usuario registrado con éxito");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error al registrar el usuario: " + e.getMessage());
         }
     }
+
+
 
     @PostMapping("/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {

@@ -55,15 +55,6 @@ public class UserService {
         if (existingUserOptional.isPresent()) {
             User existingUser = existingUserOptional.get();
 
-            // Verificar si el correo ha cambiado y si el nuevo correo ya está en uso por otro usuario
-            if (userDetails.getEmail() != null && !existingUser.getEmail().equals(userDetails.getEmail())) {
-                Optional<User> userWithSameEmail = userRepository.findByEmail(userDetails.getEmail());
-                if (userWithSameEmail.isPresent() && !userWithSameEmail.get().getId().equals(id)) {
-                    throw new IllegalArgumentException("El correo electrónico ya está registrado");
-                }
-                existingUser.setEmail(userDetails.getEmail());
-            }
-
             // Actualizamos solo los campos que no son nulos
             if (userDetails.getFirstName() != null) {
                 existingUser.setFirstName(userDetails.getFirstName());
@@ -71,8 +62,12 @@ public class UserService {
             if (userDetails.getLastName() != null) {
                 existingUser.setLastName(userDetails.getLastName());
             }
-            if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
-                existingUser.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+            if (userDetails.getEmail() != null && !existingUser.getEmail().equals(userDetails.getEmail())) {
+                Optional<User> userWithSameEmail = userRepository.findByEmail(userDetails.getEmail());
+                if (userWithSameEmail.isPresent() && !userWithSameEmail.get().getId().equals(id)) {
+                    throw new IllegalArgumentException("El correo electrónico ya está registrado");
+                }
+                existingUser.setEmail(userDetails.getEmail());
             }
             if (userDetails.getProfileImage() != null) {
                 existingUser.setProfileImage(userDetails.getProfileImage());
@@ -83,6 +78,7 @@ public class UserService {
             throw new IllegalArgumentException("Usuario no encontrado");
         }
     }
+
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);

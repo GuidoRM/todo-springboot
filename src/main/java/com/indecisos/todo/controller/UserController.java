@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -50,8 +52,23 @@ public class UserController {
                 });
     }
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<User>> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
+    public ResponseEntity<ApiResponse<User>> updateUser(
+            @PathVariable Long id,
+            @RequestParam("firstName") String firstName,
+            @RequestParam("lastName") String lastName,
+            @RequestParam("email") String email,
+            @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) {
+
         try {
+            User userDetails = new User();
+            userDetails.setFirstName(firstName);
+            userDetails.setLastName(lastName);
+            userDetails.setEmail(email);
+
+            if (profileImage != null && !profileImage.isEmpty()) {
+                userDetails.setProfileImage(profileImage.getBytes());
+            }
+
             User updatedUser = userService.updateUser(id, userDetails);
             ApiResponse<User> response = new ApiResponse<>(
                     HttpStatus.OK.value(),
@@ -66,8 +83,16 @@ public class UserController {
                     null
             );
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        } catch (IOException e) {
+            return new ResponseEntity<>(new ApiResponse<>(
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    "Error al procesar la imagen de perfil",
+                    null
+            ), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
 
     @PostMapping
     public ResponseEntity<ApiResponse<User>> createUser(@RequestBody User user) {

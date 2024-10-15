@@ -45,6 +45,7 @@ public class Task {
     private Set<Label> labels;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference  // Evita referencias cíclicas
     private Set<Attachment> attachments;
 
 
