@@ -69,6 +69,9 @@ public class UserService {
                 }
                 existingUser.setEmail(userDetails.getEmail());
             }
+            if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
+                existingUser.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+            }
             if (userDetails.getProfileImage() != null) {
                 existingUser.setProfileImage(userDetails.getProfileImage());
             }

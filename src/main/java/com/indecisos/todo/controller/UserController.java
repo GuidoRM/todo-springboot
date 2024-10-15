@@ -57,6 +57,7 @@ public class UserController {
             @RequestParam("firstName") String firstName,
             @RequestParam("lastName") String lastName,
             @RequestParam("email") String email,
+            @RequestParam(value = "password", required = false) String password,
             @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) {
 
         try {
@@ -64,6 +65,7 @@ public class UserController {
             userDetails.setFirstName(firstName);
             userDetails.setLastName(lastName);
             userDetails.setEmail(email);
+            userDetails.setPassword(password);
 
             if (profileImage != null && !profileImage.isEmpty()) {
                 userDetails.setProfileImage(profileImage.getBytes());
